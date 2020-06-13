@@ -15,7 +15,7 @@ CXX           = g++
 DEFINES       = -DQT_QML_DEBUG -DQT_WIDGETS_LIB -DQT_GUI_LIB -DQT_CORE_LIB
 CFLAGS        = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
 CXXFLAGS      = -pipe -g -Wall -W -D_REENTRANT -fPIC $(DEFINES)
-INCPATH       = -I../../GUIDemo -I. -IGeneratedFiles -I../../third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -IGeneratedFiles/debug -isystem /usr/include/libdrm -IGeneratedFiles -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++
+INCPATH       = -I../../GUIDemo -I. -IGeneratedFiles -I../../third_party/SIMRAD_SDK/SDK_3.0.02/include -I../../third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -IGeneratedFiles/debug -isystem /usr/include/libdrm -IGeneratedFiles -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++
 QMAKE         = /opt/Qt/5.9.8/gcc_64/bin/qmake
 DEL_FILE      = rm -f
 CHK_DIR_EXISTS= test -d
@@ -38,7 +38,7 @@ DISTNAME      = GUIDemo1.0.0
 DISTDIR = /home/scar1et/Coding/MarineRadarVisualization/GUIDemo/build/.tmp/GUIDemo1.0.0
 LINK          = g++
 LFLAGS        = -Wl,-rpath,/opt/Qt/5.9.8/gcc_64/lib
-LIBS          = $(SUBLIBS) -lNRPClient -lNRPPPI -lsqlite3 -L/opt/Qt/5.9.8/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
+LIBS          = $(SUBLIBS) -lNRPClient -lNRPPPI -lsqlite3 -L/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/../third_party/pyclustering/ccore/libs/ -lpyclustering -L/opt/Qt/5.9.8/gcc_64/lib -lQt5Widgets -lQt5Gui -lQt5Core -lGL -lpthread 
 AR            = ar cqs
 RANLIB        = 
 SED           = sed
@@ -67,7 +67,11 @@ SOURCES       = ../CustomFrames.cpp \
 		../TabSectorBlanking.cpp \
 		../TabPPI.cpp \
 		../TabTargets.cpp \
+		../TargetTracking/RadarFiltering.cpp \
+		../TargetTracking/math_utils.cpp \
+		../TargetTracking/timecounter.cpp \
 		../datarecorder.cpp \
+		../datareplay.cpp \
 		../datatransimission.cpp \
 		../main.cpp GeneratedFiles/debug/moc_CustomFrames.cpp \
 		GeneratedFiles/debug/moc_GUIDemo.cpp \
@@ -101,7 +105,11 @@ OBJECTS       = CustomFrames.o \
 		TabSectorBlanking.o \
 		TabPPI.o \
 		TabTargets.o \
+		RadarFiltering.o \
+		math_utils.o \
+		timecounter.o \
 		datarecorder.o \
+		datareplay.o \
 		datatransimission.o \
 		main.o \
 		moc_CustomFrames.o \
@@ -318,7 +326,13 @@ DIST          = /opt/Qt/5.9.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../TabPPI.h \
 		../TabTargets.h \
 		/ \
+		../TargetTracking/RadarFiltering.h \
+		../TargetTracking/TargetTracking.h \
+		../TargetTracking/TargetTrackingData.h \
+		../TargetTracking/math_utils.h \
+		../TargetTracking/timecounter.h \
 		../datarecorder.h \
+		../datareplay.h \
 		../datatransimission.h ../CustomFrames.cpp \
 		../GUIDemo.cpp \
 		../MultiRadar.cpp \
@@ -336,7 +350,11 @@ DIST          = /opt/Qt/5.9.8/gcc_64/mkspecs/features/spec_pre.prf \
 		../TabSectorBlanking.cpp \
 		../TabPPI.cpp \
 		../TabTargets.cpp \
+		../TargetTracking/RadarFiltering.cpp \
+		../TargetTracking/math_utils.cpp \
+		../TargetTracking/timecounter.cpp \
 		../datarecorder.cpp \
+		../datareplay.cpp \
 		../datatransimission.cpp \
 		../main.cpp
 QMAKE_TARGET  = GUIDemo
@@ -736,8 +754,8 @@ distdir: FORCE
 	@test -d $(DISTDIR) || mkdir -p $(DISTDIR)
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents /opt/Qt/5.9.8/gcc_64/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents ../CustomFrames.h ../GUIDemo.h ../MultiRadar.h ../OverlayManager.h ../QControlUtils.h ../ScannerInfo.h ../TabBase.h ../TabAdvanced.h ../TabBScan.h ../TabGuardZone.h ../TabImage.h ../TabInstallation.h ../TabFeatures.h ../TabNewFunction.h ../TabSectorBlanking.h ../TabPPI.h ../TabTargets.h / ../datarecorder.h ../datatransimission.h $(DISTDIR)/
-	$(COPY_FILE) --parents ../CustomFrames.cpp ../GUIDemo.cpp ../MultiRadar.cpp ../OverlayManager.cpp ../QControlUtils.cpp ../ScannerInfo.cpp ../TabBase.cpp ../TabAdvanced.cpp ../TabBScan.cpp ../TabGuardZone.cpp ../TabImage.cpp ../TabInstallation.cpp ../TabFeatures.cpp ../TabNewFunction.cpp ../TabSectorBlanking.cpp ../TabPPI.cpp ../TabTargets.cpp ../datarecorder.cpp ../datatransimission.cpp ../main.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents ../CustomFrames.h ../GUIDemo.h ../MultiRadar.h ../OverlayManager.h ../QControlUtils.h ../ScannerInfo.h ../TabBase.h ../TabAdvanced.h ../TabBScan.h ../TabGuardZone.h ../TabImage.h ../TabInstallation.h ../TabFeatures.h ../TabNewFunction.h ../TabSectorBlanking.h ../TabPPI.h ../TabTargets.h / ../TargetTracking/RadarFiltering.h ../TargetTracking/TargetTracking.h ../TargetTracking/TargetTrackingData.h ../TargetTracking/math_utils.h ../TargetTracking/timecounter.h ../datarecorder.h ../datareplay.h ../datatransimission.h $(DISTDIR)/
+	$(COPY_FILE) --parents ../CustomFrames.cpp ../GUIDemo.cpp ../MultiRadar.cpp ../OverlayManager.cpp ../QControlUtils.cpp ../ScannerInfo.cpp ../TabBase.cpp ../TabAdvanced.cpp ../TabBScan.cpp ../TabGuardZone.cpp ../TabImage.cpp ../TabInstallation.cpp ../TabFeatures.cpp ../TabNewFunction.cpp ../TabSectorBlanking.cpp ../TabPPI.cpp ../TabTargets.cpp ../TargetTracking/RadarFiltering.cpp ../TargetTracking/math_utils.cpp ../TargetTracking/timecounter.cpp ../datarecorder.cpp ../datareplay.cpp ../datatransimission.cpp ../main.cpp $(DISTDIR)/
 	$(COPY_FILE) --parents ../GUIDemo.ui ../Registration.ui $(DISTDIR)/
 
 
@@ -889,7 +907,7 @@ GeneratedFiles/debug/moc_CustomFrames.cpp: /opt/Qt/5.9.8/gcc_64/include/QtWidget
 		../CustomFrames.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../CustomFrames.h -o GeneratedFiles/debug/moc_CustomFrames.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../CustomFrames.h -o GeneratedFiles/debug/moc_CustomFrames.cpp
 
 GeneratedFiles/debug/moc_GUIDemo.cpp: /opt/Qt/5.9.8/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt/5.9.8/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -1299,10 +1317,23 @@ GeneratedFiles/debug/moc_GUIDemo.cpp: /opt/Qt/5.9.8/gcc_64/include/QtWidgets/QMa
 		../TabTargets.h \
 		../datarecorder.h \
 		../datatransimission.h \
+		../TargetTracking/TargetTracking.h \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/dbscan.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/cluster_algorithm.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/cluster_data.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/definitions.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/dbscan_data.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/container/kdtree.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/container/kdnode.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/utils/metric.hpp \
+		../TargetTracking/math_utils.h \
+		../TargetTracking/timecounter.h \
+		../TargetTracking/RadarFiltering.h \
+		../TargetTracking/TargetTrackingData.h \
 		../GUIDemo.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../GUIDemo.h -o GeneratedFiles/debug/moc_GUIDemo.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../GUIDemo.h -o GeneratedFiles/debug/moc_GUIDemo.cpp
 
 GeneratedFiles/debug/moc_MultiRadar.cpp: /opt/Qt/5.9.8/gcc_64/include/QtWidgets/QMainWindow \
 		/opt/Qt/5.9.8/gcc_64/include/QtWidgets/qmainwindow.h \
@@ -1483,7 +1514,7 @@ GeneratedFiles/debug/moc_MultiRadar.cpp: /opt/Qt/5.9.8/gcc_64/include/QtWidgets/
 		../MultiRadar.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../MultiRadar.h -o GeneratedFiles/debug/moc_MultiRadar.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../MultiRadar.h -o GeneratedFiles/debug/moc_MultiRadar.cpp
 
 GeneratedFiles/debug/moc_QControlUtils.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.02/include/NavRadarProtocol.h \
 		../../third_party/SIMRAD_SDK/SDK_3.0.02/include/NavTypes.h \
@@ -1630,7 +1661,7 @@ GeneratedFiles/debug/moc_QControlUtils.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0
 		../QControlUtils.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../QControlUtils.h -o GeneratedFiles/debug/moc_QControlUtils.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../QControlUtils.h -o GeneratedFiles/debug/moc_QControlUtils.cpp
 
 GeneratedFiles/debug/moc_ScannerInfo.cpp: /opt/Qt/5.9.8/gcc_64/include/QtGui/QtGui \
 		/opt/Qt/5.9.8/gcc_64/include/QtGui/QtGuiDepends \
@@ -2013,7 +2044,7 @@ GeneratedFiles/debug/moc_ScannerInfo.cpp: /opt/Qt/5.9.8/gcc_64/include/QtGui/QtG
 		../ScannerInfo.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../ScannerInfo.h -o GeneratedFiles/debug/moc_ScannerInfo.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../ScannerInfo.h -o GeneratedFiles/debug/moc_ScannerInfo.cpp
 
 GeneratedFiles/debug/moc_TabAdvanced.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.02/include/ImageClientObserver.h \
 		../../third_party/SIMRAD_SDK/SDK_3.0.02/include/NavRadarProtocol.h \
@@ -2073,7 +2104,7 @@ GeneratedFiles/debug/moc_TabAdvanced.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.0
 		../TabAdvanced.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabAdvanced.h -o GeneratedFiles/debug/moc_TabAdvanced.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabAdvanced.h -o GeneratedFiles/debug/moc_TabAdvanced.cpp
 
 GeneratedFiles/debug/moc_TabBScan.cpp: /opt/Qt/5.9.8/gcc_64/include/QtCore/QObject \
 		/opt/Qt/5.9.8/gcc_64/include/QtCore/qobject.h \
@@ -2266,7 +2297,7 @@ GeneratedFiles/debug/moc_TabBScan.cpp: /opt/Qt/5.9.8/gcc_64/include/QtCore/QObje
 		../TabBScan.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabBScan.h -o GeneratedFiles/debug/moc_TabBScan.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabBScan.h -o GeneratedFiles/debug/moc_TabBScan.cpp
 
 GeneratedFiles/debug/moc_TabGuardZone.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.02/include/NavRadarProtocol.h \
 		../../third_party/SIMRAD_SDK/SDK_3.0.02/include/NavTypes.h \
@@ -2362,7 +2393,7 @@ GeneratedFiles/debug/moc_TabGuardZone.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.
 		../TabGuardZone.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabGuardZone.h -o GeneratedFiles/debug/moc_TabGuardZone.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabGuardZone.h -o GeneratedFiles/debug/moc_TabGuardZone.cpp
 
 GeneratedFiles/debug/moc_TabImage.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.02/include/Feature.h \
 		../../third_party/SIMRAD_SDK/SDK_3.0.02/include/NavRadarProtocol.h \
@@ -2421,7 +2452,7 @@ GeneratedFiles/debug/moc_TabImage.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.02/i
 		../TabImage.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabImage.h -o GeneratedFiles/debug/moc_TabImage.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabImage.h -o GeneratedFiles/debug/moc_TabImage.cpp
 
 GeneratedFiles/debug/moc_TabInstallation.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.02/include/Feature.h \
 		../../third_party/SIMRAD_SDK/SDK_3.0.02/include/NavRadarProtocol.h \
@@ -2480,7 +2511,7 @@ GeneratedFiles/debug/moc_TabInstallation.cpp: ../../third_party/SIMRAD_SDK/SDK_3
 		../TabInstallation.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabInstallation.h -o GeneratedFiles/debug/moc_TabInstallation.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabInstallation.h -o GeneratedFiles/debug/moc_TabInstallation.cpp
 
 GeneratedFiles/debug/moc_TabFeatures.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.02/include/Feature.h \
 		../../third_party/SIMRAD_SDK/SDK_3.0.02/include/NavRadarProtocol.h \
@@ -2539,7 +2570,7 @@ GeneratedFiles/debug/moc_TabFeatures.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.0
 		../TabFeatures.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabFeatures.h -o GeneratedFiles/debug/moc_TabFeatures.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabFeatures.h -o GeneratedFiles/debug/moc_TabFeatures.cpp
 
 GeneratedFiles/debug/moc_TabNewFunction.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.02/include/Feature.h \
 		../../third_party/SIMRAD_SDK/SDK_3.0.02/include/NavRadarProtocol.h \
@@ -2598,7 +2629,7 @@ GeneratedFiles/debug/moc_TabNewFunction.cpp: ../../third_party/SIMRAD_SDK/SDK_3.
 		../TabNewFunction.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabNewFunction.h -o GeneratedFiles/debug/moc_TabNewFunction.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabNewFunction.h -o GeneratedFiles/debug/moc_TabNewFunction.cpp
 
 GeneratedFiles/debug/moc_TabSectorBlanking.cpp: ../../third_party/SIMRAD_SDK/SDK_3.0.02/include/Feature.h \
 		../../third_party/SIMRAD_SDK/SDK_3.0.02/include/NavRadarProtocol.h \
@@ -2695,7 +2726,7 @@ GeneratedFiles/debug/moc_TabSectorBlanking.cpp: ../../third_party/SIMRAD_SDK/SDK
 		../TabSectorBlanking.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabSectorBlanking.h -o GeneratedFiles/debug/moc_TabSectorBlanking.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabSectorBlanking.h -o GeneratedFiles/debug/moc_TabSectorBlanking.cpp
 
 GeneratedFiles/debug/moc_TabPPI.cpp: /opt/Qt/5.9.8/gcc_64/include/QtCore/QObject \
 		/opt/Qt/5.9.8/gcc_64/include/QtCore/qobject.h \
@@ -2888,7 +2919,7 @@ GeneratedFiles/debug/moc_TabPPI.cpp: /opt/Qt/5.9.8/gcc_64/include/QtCore/QObject
 		../TabPPI.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabPPI.h -o GeneratedFiles/debug/moc_TabPPI.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabPPI.h -o GeneratedFiles/debug/moc_TabPPI.cpp
 
 GeneratedFiles/debug/moc_TabTargets.cpp: /opt/Qt/5.9.8/gcc_64/include/QtCore/QObject \
 		/opt/Qt/5.9.8/gcc_64/include/QtCore/qobject.h \
@@ -2941,7 +2972,7 @@ GeneratedFiles/debug/moc_TabTargets.cpp: /opt/Qt/5.9.8/gcc_64/include/QtCore/QOb
 		../TabTargets.h \
 		GeneratedFiles/debug/moc_predefs.h \
 		/opt/Qt/5.9.8/gcc_64/bin/moc
-	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabTargets.h -o GeneratedFiles/debug/moc_TabTargets.cpp
+	/opt/Qt/5.9.8/gcc_64/bin/moc $(DEFINES) --include GeneratedFiles/debug/moc_predefs.h -I/opt/Qt/5.9.8/gcc_64/mkspecs/linux-g++ -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo -I/home/scar1et/Coding/MarineRadarVisualization/GUIDemo/GeneratedFiles -I/home/scar1et/Coding/MarineRadarVisualization/third_party/SIMRAD_SDK/SDK_3.0.02/include -I/home/scar1et/Coding/MarineRadarVisualization/third_party/pyclustering/ccore/include -I/opt/Qt/5.9.8/gcc_64/include -I/opt/Qt/5.9.8/gcc_64/include/QtWidgets -I/opt/Qt/5.9.8/gcc_64/include/QtGui -I/opt/Qt/5.9.8/gcc_64/include/QtCore -I. -I/usr/include/c++/7 -I/usr/include/x86_64-linux-gnu/c++/7 -I/usr/include/c++/7/backward -I/usr/lib/gcc/x86_64-linux-gnu/7/include -I/usr/local/include -I/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed -I/usr/include/x86_64-linux-gnu -I/usr/include ../TabTargets.h -o GeneratedFiles/debug/moc_TabTargets.cpp
 
 compiler_moc_source_make_all:
 compiler_moc_source_clean:
@@ -3504,6 +3535,19 @@ GUIDemo.o: ../GUIDemo.cpp ../GUIDemo.h \
 		../TabTargets.h \
 		../datarecorder.h \
 		../datatransimission.h \
+		../TargetTracking/TargetTracking.h \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/dbscan.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/cluster_algorithm.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/cluster_data.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/definitions.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/dbscan_data.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/container/kdtree.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/container/kdnode.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/utils/metric.hpp \
+		../TargetTracking/math_utils.h \
+		../TargetTracking/timecounter.h \
+		../TargetTracking/RadarFiltering.h \
+		../TargetTracking/TargetTrackingData.h \
 		../QControlUtils.h \
 		/opt/Qt/5.9.8/gcc_64/include/QtWidgets/QMenu \
 		/opt/Qt/5.9.8/gcc_64/include/QtWidgets/qmenu.h \
@@ -6387,8 +6431,21 @@ TabTargets.o: ../TabTargets.cpp ../TabTargets.h \
 		/opt/Qt/5.9.8/gcc_64/include/QtWidgets/QWidget
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o TabTargets.o ../TabTargets.cpp
 
+RadarFiltering.o: ../TargetTracking/RadarFiltering.cpp ../TargetTracking/RadarFiltering.h \
+		../TargetTracking/TargetTrackingData.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o RadarFiltering.o ../TargetTracking/RadarFiltering.cpp
+
+math_utils.o: ../TargetTracking/math_utils.cpp ../TargetTracking/math_utils.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o math_utils.o ../TargetTracking/math_utils.cpp
+
+timecounter.o: ../TargetTracking/timecounter.cpp ../TargetTracking/timecounter.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o timecounter.o ../TargetTracking/timecounter.cpp
+
 datarecorder.o: ../datarecorder.cpp ../datarecorder.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o datarecorder.o ../datarecorder.cpp
+
+datareplay.o: ../datareplay.cpp ../datareplay.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o datareplay.o ../datareplay.cpp
 
 datatransimission.o: ../datatransimission.cpp ../datatransimission.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o datatransimission.o ../datatransimission.cpp
@@ -6801,7 +6858,20 @@ main.o: ../main.cpp /opt/Qt/5.9.8/gcc_64/include/QtWidgets/QApplication \
 		../TabSectorBlanking.h \
 		../TabTargets.h \
 		../datarecorder.h \
-		../datatransimission.h
+		../datatransimission.h \
+		../TargetTracking/TargetTracking.h \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/dbscan.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/cluster_algorithm.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/cluster_data.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/definitions.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/cluster/dbscan_data.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/container/kdtree.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/container/kdnode.hpp \
+		../../third_party/pyclustering/ccore/include/pyclustering/utils/metric.hpp \
+		../TargetTracking/math_utils.h \
+		../TargetTracking/timecounter.h \
+		../TargetTracking/RadarFiltering.h \
+		../TargetTracking/TargetTrackingData.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o main.o ../main.cpp
 
 moc_CustomFrames.o: GeneratedFiles/debug/moc_CustomFrames.cpp 

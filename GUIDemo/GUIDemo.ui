@@ -7745,38 +7745,45 @@
          <rect>
           <x>50</x>
           <y>40</y>
-          <width>211</width>
-          <height>161</height>
+          <width>151</width>
+          <height>121</height>
          </rect>
         </property>
         <property name="title">
          <string>New Functions</string>
         </property>
-        <widget class="QCheckBox" name="checkBox_DataRecord">
+        <widget class="QWidget" name="">
          <property name="geometry">
           <rect>
            <x>10</x>
            <y>30</y>
-           <width>131</width>
-           <height>23</height>
+           <width>132</width>
+           <height>83</height>
           </rect>
          </property>
-         <property name="text">
-          <string>Data Record</string>
-         </property>
-        </widget>
-        <widget class="QCheckBox" name="checkBox_datatransmit">
-         <property name="geometry">
-          <rect>
-           <x>10</x>
-           <y>60</y>
-           <width>121</width>
-           <height>23</height>
-          </rect>
-         </property>
-         <property name="text">
-          <string>Data Transmit</string>
-         </property>
+         <layout class="QVBoxLayout" name="verticalLayout_6">
+          <item>
+           <widget class="QCheckBox" name="checkBox_DataRecord">
+            <property name="text">
+             <string>Data Record</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_datatransmit">
+            <property name="text">
+             <string>Data Transmit</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkBox_TT">
+            <property name="text">
+             <string>Target Trakcing</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
         </widget>
        </widget>
       </widget>

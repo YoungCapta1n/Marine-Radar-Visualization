@@ -11,6 +11,7 @@
 
 #include <NavRadarProtocol.h>
 #include <cstring>
+
 //-----------------------------------------------------------------------------
 // Helper Functions
 //-----------------------------------------------------------------------------
@@ -95,7 +96,20 @@ GUIDemo::GUIDemo(QWidget* pParent, Qt::WindowFlags flags)
       m_pTargetAlarmSetup(nullptr),
       m_pTargetProperties(nullptr),
       m_pTargets(nullptr),
-      m_pTargetLocations(nullptr) {
+      m_pTargetLocations(nullptr),
+      rt_marineradar_data({
+          0,      // spoke_azimuth_deg
+          0,      // spoke_samplerange_m
+          {0x00}  // spokedata
+      }),
+      rt_motion_data({
+          0,  // vessel_x
+          0,  // vessel_y
+          0,  // vessel_theta
+          0,  // vessel_u
+          0,  // vessel_v
+          0   // vessel_r
+      }) {
   m_pImageClient = new Navico::Protocol::NRP::tImageClient();
   m_pTargetClient = new Navico::Protocol::NRP::tTargetTrackingClient();
   InitProtocolData();
@@ -685,3 +699,43 @@ void GUIDemo::DataTransmissionLoop() {
     }
   }
 }  // DataTransmissionLoop
+
+void GUIDemo::TargetTrackingLoop() {
+  // Spoke Processing
+  SpokeProcessdata SpokeProcess_data{
+      0.1,  // sample_time
+      0.0,  // radar_x
+      0.0   // radar_y
+  };
+
+  AlarmZone Alarm_Zone{
+      5,            // start_range_m
+      50,           // end_range_m
+      -0.5 * M_PI,  // center_bearing_rad
+      M_PI,         // width_bearing_rad
+      0x90          // sensitivity_threhold
+  };
+
+  TrackingTargetData TrackingTarget_Data{
+      1,    // min_squared_radius
+      36,   // max_squared_radius
+      0.8,  // speed_threhold
+      20,   // max_speed
+      4,    // max_acceleration
+      600,  // max_roti
+      1,    // safe_distance
+      0.5,  // K_radius
+      1,    // K_delta_speed
+      1     // K_delta_yaw;
+  };
+
+  ClusteringData Clustering_Data{
+      4.4,  // p_radius
+      2     // p_minumum_neighbors
+  };
+
+  const int max_num_targets = 20;
+
+  TargetTracking<max_num_targets> Target_Tracking(
+      Alarm_Zone, SpokeProcess_data, TrackingTarget_Data, Clustering_Data);
+}

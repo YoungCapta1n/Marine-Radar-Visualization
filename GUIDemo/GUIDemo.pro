@@ -4,7 +4,6 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 CONFIG += c++17
 CONFIG += warn_on
 CONFIG += console
-
 #------------------------------------------------------------
 # Source Files
 #------------------------------------------------------------
@@ -31,7 +30,13 @@ HEADERS += \
     TabSectorBlanking.h \
     TabPPI.h \
     TabTargets.h \ \
+    TargetTracking/RadarFiltering.h \
+    TargetTracking/TargetTracking.h \
+    TargetTracking/TargetTrackingData.h \
+    TargetTracking/math_utils.h \
+    TargetTracking/timecounter.h \
     datarecorder.h \
+    datareplay.h \
     datatransimission.h
 
 SOURCES += \
@@ -52,7 +57,11 @@ SOURCES += \
     TabSectorBlanking.cpp \
     TabPPI.cpp \
     TabTargets.cpp \
+    TargetTracking/RadarFiltering.cpp \
+    TargetTracking/math_utils.cpp \
+    TargetTracking/timecounter.cpp \
     datarecorder.cpp \
+    datareplay.cpp \
     datatransimission.cpp \
     main.cpp \
 
@@ -61,7 +70,7 @@ SOURCES += \
 #------------------------------------------------------------
 
 INCLUDES = \
-    ../third_party/SIMRAD_SDK/SDK_3.0.02/include
+    ../third_party/SIMRAD_SDK/SDK_3.0.02/include \
     ../third_party/pyclustering/ccore/include
 
 #------------------------------------------------------------
@@ -83,7 +92,8 @@ LIBS += \
 #    -L../../lib/$${TARGET_DIR} \
   	-lNRPClient \
   	-lNRPPPI \
-        -lsqlite3
+        -lsqlite3 \
+        -L$$PWD/../third_party/pyclustering/ccore/libs/ -lpyclustering
    
 #------------------------------------------------------------
 # Final config
@@ -92,5 +102,4 @@ LIBS += \
 #set the qmake variables
 DEPENDPATH += $$INCLUDES
 INCLUDEPATH += $$INCLUDES
-
 

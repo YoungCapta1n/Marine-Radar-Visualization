@@ -22,6 +22,7 @@ class tTabNewFunction : public tTabBase {
   void OnConnect(Navico::Protocol::NRP::tImageClient* pImageClient);
   bool IsDatabase() const noexcept { return IsDatabase_; }
   bool IsDataTransmission() const noexcept { return IsDataTransmission_; }
+  bool IsTargetTracking() const noexcept { return IsTargetTracking_; }
 
  private slots:
   //-----------------------------------------------------------------------------
@@ -30,10 +31,13 @@ class tTabNewFunction : public tTabBase {
   // group: Configuration
   void RecordData_check(bool checked);
   void TransmitData_check(bool checked);
+  void TrackTarget_check(bool checked);
 
  private:
   bool IsDatabase_ = false;
   bool IsDataTransmission_ = false;
+  bool IsTargetTracking_ = false;
+
 };
 
 //-----------------------------------------------------------------------------

@@ -36,6 +36,7 @@
 
 #include "OverlayManager.h"
 
+#include "TargetTracking/TargetTracking.h"
 #include "datarecorder.h"
 #include "datatransimission.h"
 
@@ -222,6 +223,7 @@ class GUIDemo
  private:
   void DataBaseLoop();
   void DataTransmissionLoop();
+  void TargetTrackingLoop();
 
   RTSpokeData rt_marineradar_data;
   RTVesselData rt_motion_data;
